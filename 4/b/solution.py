@@ -66,17 +66,19 @@ def calculate_winning_board_score(board, called_num):
                 score += board[row][k]
     return score * called_num
 
+won_boards = []
+won_scores = []
 for i in range(len(random_nums)):
-    should_break = False
     crn_num = random_nums[i]
     for j in range(len(all_boards)):
         marked_board = mark_board_for_number(all_boards[j], crn_num)
         board_won = check_if_board_won(marked_board)
         if board_won:
-            print("board won: " + str(j))
             score = calculate_winning_board_score(marked_board, crn_num)
-            print(score)
-            should_break = True
-            break
-    if should_break:
-        break
+            if j not in won_boards:
+                won_boards.append(j)
+                won_scores.append(score)
+
+print("WON BOARDS:")
+print(won_boards)
+print(won_scores)
