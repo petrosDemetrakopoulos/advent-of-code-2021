@@ -1,4 +1,3 @@
-import numpy as np
 with open('input.txt') as f:
     lines = map(lambda x: x, f.readlines())
 
@@ -96,9 +95,6 @@ for point in all_points_covered:
     y = point[1]
     matrix[x][y] += 1
 
-counter = 0
-for row in matrix:
-    for p in row:
-        if p > 1:
-            counter += 1
+flattened_matrix = reduce(lambda x,y: x + y, matrix)
+counter = sum(1 for x in flattened_matrix if x > 1)
 print(counter)
