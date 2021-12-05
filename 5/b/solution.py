@@ -2,15 +2,14 @@ import numpy as np
 with open('input.txt') as f:
     lines = map(lambda x: x, f.readlines())
 
-def prprocess_data(lines):
+def preprocess_data(lines):
     lines = map(lambda x: x.replace("\n","").replace(" ","").split("->"), lines)
     for i in range(len(lines)):
         for p in range(len(lines[i])):
-            lines[i][p] = lines[i][p].split(",")
-            lines[i][p] = map(lambda x: int(x), lines[i][p])
+            lines[i][p] = map(lambda x: int(x), lines[i][p].split(","))
     return lines
 
-data = prprocess_data(lines)
+data = preprocess_data(lines)
 def find_max_x(data):
     all_x = map(lambda x: map(lambda y: y[0], x), data)
     all_x = reduce(lambda x,y: x+y, all_x)
@@ -27,12 +26,9 @@ def calculate_lamda(line):
     else:
         return 0
 
-diagonal_lines = []
-for line in data:
-    lamda = calculate_lamda(line)
-    if lamda == 1 or lamda == -1:
-        diagonal_lines.append(line)
-# keep only horizontal and vertical lines
+diagonal_lines = map(lambda x: x if calculate_lamda(x) in [-1,1] else [], data)
+diagonal_lines = filter(lambda x: len(x) > 0, diagonal_lines)
+
 filtered_lines = filter(lambda x: x[0][0] == x[1][0] or x[0][1] == x[1][1], data)
 
 matrix = []
@@ -44,8 +40,7 @@ for i in range(0,max_x + 1):
     for j in range(0,max_y + 1):
         matrix[i].append(0)
 
-all_points_covered = []
-for line in filtered_lines:
+def points_of_line(line):
     points_covered = []
     if line[0][0] == line[1][0]: #horizontal
         step = 1 if line[1][1] >= line[0][1] else -1
@@ -55,61 +50,42 @@ for line in filtered_lines:
         step = 1 if line[1][0] >= line[0][0] else -1
         for i in range(line[0][0], line[1][0] + step, step):
             points_covered.append([i, line[0][1]])
-    all_points_covered.append(points_covered)
+    return points_covered
 
-k = 0
-count_diag = 0
-diags_caught = []
+all_points_covered = map(lambda x: points_of_line(x), filtered_lines)
+
 for line in diagonal_lines:
     points_covered = []
     if line[0][0] == line[0][1] and line[1][0] == line[1][1]: #horizontal
-        diags_caught.append(line)
-        count_diag += 1
         step = 1 if line[1][1] >= line[0][1] else -1
         for i in range(line[0][0], line[1][1] + step, step):
             points_covered.append([i,i])
-            k += 1
     elif line [1][1] == line [0][0] and line[1][0] == line[0][1]:
-        diags_caught.append(line)
-        count_diag += 1
         step = -1 if line[1][1] <= line[0][1] else 1
         j = 0
         for i in range(line[0][1], line[1][1] + step, step):
             sign = 1 if line[1][1] <= line[0][1] else -1
             points_covered.append([line[0][0] + sign*j, line[0][1] - sign*j])
-            k += 1
             j += 1
     elif line[0][0] >= line[1][0] and line[0][1] >= line[1][1]:
-        diags_caught.append(line)
-        count_diag += 1
         j = 0
         for i in range(line[0][0], line[1][0] -1, -1):
             points_covered.append([i, line[0][1] - j])
-            k += 1
             j += 1
     elif line[0][0] <= line[1][0] and line[0][1] >= line[1][1]:
-        diags_caught.append(line)
-        count_diag += 1
         j = 0
         for i in range(line[0][0], line[1][0] + 1, 1):
             points_covered.append([i, line[0][1] - j])
-            k += 1
             j += 1
     elif line[0][0] >= line[1][0] and line[0][1] <= line[1][1]:
-        diags_caught.append(line)
-        count_diag += 1
         j = 0
         for i in range(line[0][0], line[1][0] -1, -1):
             points_covered.append([i, line[0][1] + j])
-            k += 1
             j += 1
     elif line[0][0] <= line[1][0] and line[0][1] <= line[1][1]:
-        diags_caught.append(line)
-        count_diag += 1
         j = 0
         for i in range(line[0][0], line[1][0] + 1, 1):
             points_covered.append([i, line[0][1] + j])
-            k += 1
             j += 1
     all_points_covered.append(points_covered)
 
