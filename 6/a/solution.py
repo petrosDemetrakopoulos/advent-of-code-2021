@@ -17,4 +17,3 @@ for day in range(0, 18):
         i += 1
     print("After " + str(day + 1) + " days:" + str(initial_fish))
 print("Total fish: " + str(len(initial_fish)))
-        

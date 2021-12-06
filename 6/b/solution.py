@@ -18,4 +18,3 @@ for day in range(0, 256):
     new_state[6] += state[0]
     state = new_state
 print("Total fish: " + str(sum(state.values())))
-        
