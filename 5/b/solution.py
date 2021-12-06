@@ -55,7 +55,7 @@ all_points_covered = map(lambda x: points_of_line(x), filtered_lines)
 
 for line in diagonal_lines:
     points_covered = []
-    if line[0][0] == line[0][1] and line[1][0] == line[1][1]: #horizontal
+    if line[0][0] == line[0][1] and line[1][0] == line[1][1]:
         step = 1 if line[1][1] >= line[0][1] else -1
         for i in range(line[0][0], line[1][1] + step, step):
             points_covered.append([i,i])
@@ -95,6 +95,7 @@ for point in all_points_covered:
     y = point[1]
     matrix[x][y] += 1
 
+counter = 0
 flattened_matrix = reduce(lambda x,y: x + y, matrix)
 counter = sum(1 for x in flattened_matrix if x > 1)
 print(counter)
