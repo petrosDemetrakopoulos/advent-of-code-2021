@@ -1,4 +1,4 @@
-with open('input.txt') as f:
+with open('test_input.txt') as f:
     lines = map(lambda x: x, f.readlines())
 
 initial_fish = map(lambda x: int(x), lines[0].split(","))
@@ -6,7 +6,7 @@ print(initial_fish)
 
 print("Initial state: " + str(initial_fish))
 day = 0
-for day in range(0, 80):
+for day in range(0, 18):
     i = 0
     for fish in initial_fish:
         if fish == 0:
