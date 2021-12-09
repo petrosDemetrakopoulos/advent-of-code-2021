@@ -1,6 +1,6 @@
 from itertools import permutations
 from functools import reduce
-with open('input.txt') as f:
+with open('test_input.txt') as f:
     lines = list(map(lambda x: x, f.readlines()))
 
 def preprocess_data(data):
