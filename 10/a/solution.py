@@ -1,20 +1,26 @@
-with open('input.txt') as f:
+with open('test_input.txt') as f:
     lines = map(lambda x: x.replace("\n",""), f.readlines())
 
 left = '<{(['
 right = '>})]'
-scores = {'>': 25137, '}': 1197,']': 57,')': 3}
-stack = []
-sum = 0
+scores = {'>': 4, '}': 3,']': 2,')': 1}
+corrupted_lines = []
 for line in lines:
+    stack = []
+    corrupted = False
     for char in line:
         if char in left:
             stack.append(char)
         elif char in right:
             index = right.find(char)
             if stack[-1] != left[index]:
-                sum += scores[char]
+                corrupted = True
                 break
             else:
                 del stack[-1]
-print(sum)
+    if corrupted:
+        corrupted_lines.append(line)
+
+
+incomplete_lines = [x for x in lines if x not in corrupted_lines]
+print(incomplete_lines)
